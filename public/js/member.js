@@ -1,0 +1,200 @@
+$(document).ready(function(){ 
+
+       $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')} });
+       fetchAll();
+
+      function fetchAll() {
+        // Destroy existing DataTable if it exists
+        if ($.fn.DataTable.isDataTable('.data-table')) {
+            $('.data-table').DataTable().destroy();
+        }
+
+        // Initialize DataTable
+        var table = $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/admin/member",
+                error: function(xhr, error, code) {
+                    console.log(xhr.responseText);
+                }
+            },
+            columns: [
+                { data: 'image', name: 'image' },
+                { data: 'bangla_name', name: 'bangla_name' }, 
+                { data: 'member_name', name: 'member_name' },
+                { data: 'phone', name: 'phone' },
+                { data: 'status', name: 'status' },
+                { data: 'edit', name: 'edit', orderable: false, searchable: false },
+                { data: 'delete', name: 'delete', orderable: false, searchable: false },
+                { data: 'email', name: 'email' },
+                { data: 'password', name: 'password' },
+            ]
+        });
+    }
+        // add new employee ajax request
+        $("#add_employee_form").submit(function(e) {
+            e.preventDefault();
+            const fd = new FormData(this);
+            $.ajax({
+              type:'POST',
+              url:"/admin/member/insert",
+              data: fd,
+              cache: false,
+              contentType: false,
+              processData: false,
+              dataType: 'json',
+              beforeSend : function()
+                   {
+                   $('.loader').show();
+                   $("#add_employee_btn").prop('disabled', true);
+                   },
+              success: function(response){
+                $('.loader').hide();
+                $("#add_employee_btn").prop('disabled', false);
+                if(response.status==200){
+                   $("#add_employee_form")[0].reset();
+                   $("#addEmployeeModal").modal('hide');
+                   $('#success_message').html("");
+                   $('#success_message').addClass('alert alert-success');
+                   $('#success_message').text(response.message);
+                   $('.error_registration').text('');
+                   $('.error_phone').text('');
+                   $('.error_email').text('');
+                   $('.error_member_no').text('');
+                   fetchAll();
+                  }else if(response.status == 400){
+                    $('.error_phone').text(response.message.phone);
+                    $('.error_email').text(response.message.email);
+                    $('.error_member_no').text(response.message.member_no);
+                  }             
+              }
+            });
+      
+          });
+
+
+        $(document).on('click', '.edit', function(e) {
+            e.preventDefault();
+            var view_id = $(this).data('id'); 
+            $('#EditModal').modal('show');
+               // console.log(view_id);         
+            $.ajax({
+              type: 'GET',
+              url: '/admin/member_view/' + view_id,
+              success: function(response) {
+                //console.log(response);
+                if (response.status == 404) {
+                  $('#success_message').html("");
+                  $('#success_message').addClass('alert alert-danger');
+                  $('#success_message').text(response.message);
+                } else {
+                  $('#edit_id').val(response.value.id);
+                  $('#edit_member_name').val(response.value.member_name);
+                  $('#edit_email').val(response.value.email);
+                  $('#edit_phone').val(response.value.phone);
+                  $('#edit_member_status').val(response.value.member_status);
+                  $('#edit_bangla_name').val(response.value.bangla_name);
+                  $('#edit_member_no').val(response.value.member_no);
+                  $('#edit_member_type').val(response.value.member_type);
+                  $('#edit_member_category').val(response.value.member_category);
+                  $('#edit_current_address').val(response.value.current_address);
+                  $('#edit_permanet_address').val(response.value.permanet_address);
+                  $('#edit_dept').val(response.value.dept);
+
+                  $('#edit_land_registration_name').val(response.value.land_registration_name);
+                  $('#edit_tax_year').val(response.value.tax_year);
+
+                  $('#edit_plot_id').val(response.value.plot_id);
+                  $('#edit_land_price').val(response.value.land_price);
+                  $('#edit_deed_no').val(response.value.deed_no);
+                  $('#edit_date_of_deed').val(response.value.date_of_deed);
+                  $('#edit_farm_no').val(response.value.farm_no);
+                  $('#edit_plot_sell').val(response.value.plot_sell);
+                  $('#edit_plot_buy').val(response.value.plot_buy);
+
+                  $('#edit_land_measure').val(response.value.land_measure);
+                  $('#edit_class_land').val(response.value.class_land);
+                  $('#edit_tax_payment').val(response.value.tax_payment);
+
+                }
+              }
+            });
+
+          });
+
+   
+      // update employee ajax request
+    $("#edit_employee_form").submit(function(e) {
+        e.preventDefault();
+  
+        const fd = new FormData(this);
+  
+        $.ajax({
+          type: 'POST',
+          url: '/admin/member/update',
+          data: fd,
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json',
+          beforeSend: function() {
+            $('.loader').show();
+            $("#edit_employee_btn").prop('disabled', true);
+          },
+          success: function(response) {
+            $("#edit_employee_btn").prop('disabled', false);
+            if (response.status == 200) {
+                $('#success_message').html("");
+                $("#EditModal").modal('hide');
+                $("#edit_employee_form")[0].reset();
+                fetchAll();
+            } else if (response.status == 400) {
+                $('.edit_error_registration').text(response.message.registration);
+                $('.edit_error_phone').text(response.message.phone);
+                $('.edit_error_email').text(response.message.email);
+                $('.edit_error_member_name').text(response.message.member_name);
+            }
+  
+            $('.loader').hide();
+          }
+  
+        });
+  
+      });
+  
+      
+           // delete employee ajax request
+           $(document).on('click', '.delete', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id'); 
+            Swal.fire({
+              title: 'Are you sure?',
+              text: "You want to delete this item!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                $.ajax({
+                  url:'/admin/member/delete',
+                  method:'delete',
+                  data: {
+                    id: id,
+                  },
+                   success: function(response) {
+                      //console.log(response);
+                     if(response.status == 400){
+                        Swal.fire("Warning",response.message, "warning");
+                     }else if(response.status == 200)
+                        Swal.fire("Deleted",response.message, "success");
+                       fetchAll();
+                  }
+                });
+              }
+            })
+          });
+
+});
