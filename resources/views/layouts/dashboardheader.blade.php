@@ -101,8 +101,9 @@
          <div class="collapse" id="collapseLayouts12" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
                  <a class="nav-link @yield('course')" href="{{url('/admin/course')}}"> Course </a>
-              
-               
+                 <a class="nav-link @yield('category')" href="{{url('/admin/category')}}"> Category </a>
+                 <a class="nav-link @yield('sub_category')" href="{{url('/admin/sub_category')}}"> Sub Category </a>
+                 <a class="nav-link @yield('sub_sub_category')" href="{{url('/admin/sub_sub_category')}}">Sub  Sub Category </a>
             </nav>
          </div>
 
@@ -121,6 +122,12 @@
                 @endforeach   
             </nav>
          </div>
+
+       
+         <a class="nav-link @yield('question') " href="{{url('admin/question')}}">
+            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+              Question
+         </a>
 
          <a class="nav-link @yield('member') " href="{{url('admin/member')}}">
             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>

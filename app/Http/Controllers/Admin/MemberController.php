@@ -61,7 +61,6 @@ class MemberController extends Controller
               $request->all(),
               [
                   'member_name'=> 'required',
-                  'bangla_name'=> 'required',
                   'phone' => 'required|unique:members,phone',
                   'email' => 'required|unique:members,email',
                   'image' => 'image|mimes:jpeg,png,jpg|max:400',
@@ -76,10 +75,8 @@ class MemberController extends Controller
           } else {
               $model = new Member;
               $model->member_name = $request->input('member_name');
-              $model->bangla_name = $request->input('bangla_name');
               $model->email = $request->input('email');
               $model->phone = $request->input('phone');
-              $model->member_category = $request->input('member_category');
               $model->current_address = $request->input('current_address');
               $model->permanet_address = $request->input('permanet_address');
               $model->password = "DUhousing12";
@@ -122,7 +119,6 @@ class MemberController extends Controller
           $user=user_info();
           $validator = \Validator::make($request->all(), [
               'member_name' => 'required',
-              'bangla_name'=> 'required',
               'phone' => 'required|unique:members,phone,' . $request->input('edit_id'),
               'image' => 'image|mimes:jpeg,png,jpg|max:400',
           ]);
@@ -137,21 +133,11 @@ class MemberController extends Controller
               $model = Member::find($request->input('edit_id'));
               if ($model) {
                 $model->member_name = $request->input('member_name');
-                $model->bangla_name = $request->input('bangla_name');
                 $model->email = $request->input('email');
                 $model->phone = $request->input('phone');
-                $model->member_type = $request->input('member_type');
-                $model->member_category = $request->input('member_category');
                 $model->current_address = $request->input('current_address');
                 $model->permanet_address = $request->input('permanet_address');
-                $model->dept = $request->input('dept');
-
                 $model->member_status = $request->input('member_status');
-             
-
-             
-           
-
                 $model->updated_by=$user->id;
 
                   if ($request->hasfile('image')) {

@@ -34,7 +34,6 @@
                    <thead>
                      <tr>
                          <td> Image </td>
-                         <td> Bangla  Name</td>
                          <td> Name </td>
                          <td> Phone </td>
                          <td> Status </td>
@@ -86,13 +85,7 @@
                <p class="text-danger error_member_name"></p>
             </div>
 
-            <div class="col-lg-6">
-               <label for="roll">Bangla  Name <span style="color:red;"> * </span> </label>
-               <input type="text" name="bangla_name" id="bangla_name" class="form-control" placeholder="" required>
-               <p class="text-danger error_member_name"></p>
-            </div>
-   
-          
+       
             <div class="col-lg-6 ">
                  <label for="roll"> Phone <span style="color:red;"> * </span></label>
                  <input type="text" name="phone" id="phone" class="form-control" placeholder="" required>
@@ -105,19 +98,7 @@
                 <p class="text-danger error_email"></p>
             </div>
 
-         
-
-
-          
-
-
-            <div class="col-lg-6 ">
-                <label for="roll"> Department/ Organization <span style="color:red;"> * </span> </label>
-                <input type="text" name="dept" id="dept" class="form-control" placeholder="" required>
-                <p class="text-danger error_member_name"></p>
-              </div>
-
-
+        
               <div class="col-lg-6 ">
                 <label for="roll"> Image (Max:500KB)</label>
                 <input type="file" name="image" id="image" class="form-control" placeholder="" >
@@ -184,18 +165,8 @@
                <p class="text-danger error_member_name"></p>
             </div>
 
-            <div class="col-lg-6">
-               <label for="roll">Bangla  Name <span style="color:red;"> * </span> </label>
-               <input type="text" name="bangla_name" id="edit_bangla_name" class="form-control" placeholder="" required>
-               <p class="text-danger error_member_name"></p>
-            </div>
-
-
-
-
-            
+         
            
-
             <div class="col-lg-6 ">
                  <label for="roll"> Phone <span style="color:red;"> * </span></label>
                  <input type="text" name="phone" id="edit_phone" class="form-control" placeholder="" required>
@@ -207,19 +178,6 @@
                 <input type="text" name="email" id="edit_email" class="form-control" placeholder="" >
                 <p class="text-danger error_email"></p>
             </div>
-
-     
-
-
-          
-
-
-            <div class="col-lg-6 ">
-                <label for="roll"> Department/ Organization <span style="color:red;"> * </span> </label>
-                <input type="text" name="dept" id="edit_dept" class="form-control" placeholder="" required>
-                <p class="text-danger error_member_name"></p>
-              </div>
-
 
               <div class="col-lg-6 ">
                 <label for="roll"> Image (Max:500KB)</label>

@@ -21,7 +21,6 @@ $(document).ready(function(){
             },
             columns: [
                 { data: 'image', name: 'image' },
-                { data: 'bangla_name', name: 'bangla_name' }, 
                 { data: 'member_name', name: 'member_name' },
                 { data: 'phone', name: 'phone' },
                 { data: 'status', name: 'status' },
@@ -102,9 +101,7 @@ $(document).ready(function(){
                   $('#edit_permanet_address').val(response.value.permanet_address);
                   $('#edit_dept').val(response.value.dept);
 
-                  $('#edit_land_registration_name').val(response.value.land_registration_name);
-                  $('#edit_tax_year').val(response.value.tax_year);
-
+                
                   $('#edit_plot_id').val(response.value.plot_id);
                   $('#edit_land_price').val(response.value.land_price);
                   $('#edit_deed_no').val(response.value.deed_no);
@@ -113,9 +110,7 @@ $(document).ready(function(){
                   $('#edit_plot_sell').val(response.value.plot_sell);
                   $('#edit_plot_buy').val(response.value.plot_buy);
 
-                  $('#edit_land_measure').val(response.value.land_measure);
-                  $('#edit_class_land').val(response.value.class_land);
-                  $('#edit_tax_payment').val(response.value.tax_payment);
+                
 
                 }
               }

@@ -11,6 +11,11 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\WebCustomize\NoticeController;
 use App\Http\Controllers\WebCustomize\PageCategoryController;
 use App\Http\Controllers\MemberAuth\MemberAuthController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\SubcategoryController;
+use App\Http\Controllers\Admin\SubsubcategoryController;
+use App\Http\Controllers\Admin\QuestionController;
+
 
 
 
@@ -83,20 +88,53 @@ use App\Http\Controllers\MemberAuth\MemberAuthController;
            Route::get('/admin/course/delete/{id}', [CourseController::class,'course_delete']);
 
 
-           // Spend Category
-           Route::get('/admin/spendcategory', [SpendCategoryController::class,'spendcategory']);
-           Route::get('/admin/spendcategory/manage', [SpendCategoryController::class,'spendcategory_manage']);
-           Route::get('/admin/spendcategory/manage/{id}', [SpendCategoryController::class,'spendcategory_manage']);
-           Route::post('/admin/spendcategory/insert', [SpendCategoryController::class,'spendcategory_insert']);
-           Route::get('/admin/spendcategory/delete/{id}', [SpendCategoryController::class,'spendcategory_delete']);
+           //admin category
+           Route::get('/admin/category',[CategoryController::class,'index']);
+           Route::get('/admin/category_fetch/{course_id}',[CategoryController::class,'fetch']);
+           Route::get('/admin/category/fetch_data/{course_id}',[CategoryController::class,'fetch_data']);
+           Route::post('admin/category_insert',[CategoryController::class,'store']);
+           Route::get('/admin/category_edit/{id}',[CategoryController::class,'edit']);
+           Route::post('/admin/category_update/{id}',[CategoryController::class,'update']);
+           Route::delete('/admin/category_delete/{id}',[CategoryController::class,'destroy']);
 
 
-            // Spend View
-            Route::get('/admin/spend',[SpendController::class,'spend']);
-            Route::get('/admin/spend/manage',[SpendController::class,'spend_manage']);
-            Route::get('/admin/spend/manage/{id}',[SpendController::class,'spend_manage']);
-            Route::post('/admin/spend/insert',[SpendController::class,'spend_insert']);
-            Route::get('/admin/spend/delete/{id}',[SpendController::class,'spend_delete']);
+             //admin sub_category
+             Route::get('/category-fetch',[SubcategoryController::class,'category_fetch']); 
+
+             Route::get('/admin/sub_category',[SubcategoryController::class,'index']);
+             Route::get('/admin/sub_category_fetch/{course_id}/{category_id}',[SubcategoryController::class,'fetch']);
+             Route::get('/admin/sub_category/fetch_data/{course_id}/{category_id}',[SubcategoryController::class,'fetch_data']);
+             Route::post('admin/sub_category_insert',[SubcategoryController::class,'store']);
+             Route::get('/admin/sub_category_edit/{id}',[SubcategoryController::class,'edit']);
+             Route::post('/admin/sub_category_update/{id}',[SubcategoryController::class,'update']);
+             Route::delete('/admin/sub_category_delete/{id}',[SubcategoryController::class,'destroy']);
+
+
+             //admin sub_sub_category
+             Route::get('/category-fetch',[SubsubcategoryController::class,'category_fetch']); 
+             Route::get('/subcategory-fetch',[SubsubcategoryController::class,'subcategory_fetch']);
+
+             Route::get('/admin/sub_sub_category',[SubsubcategoryController::class,'index']);
+             Route::get('/admin/sub_sub_category_fetch/{course_id}/{category_id}/{sub_category_id}',[SubsubcategoryController::class,'fetch']);
+             Route::get('/admin/sub_sub_category/fetch_data/{course_id}/{category_id}/{sub_category_id}',[SubsubcategoryController::class,'fetch_data']);
+             Route::post('admin/sub_sub_category_insert',[SubsubcategoryController::class,'store']);
+             Route::get('/admin/sub_sub_category_edit/{id}',[SubsubcategoryController::class,'edit']);
+             Route::post('/admin/sub_sub_category_update/{id}',[SubsubcategoryController::class,'update']);
+             Route::delete('/admin/sub_sub_category_delete/{id}',[SubsubcategoryController::class,'destroy']);
+
+
+           //admin question
+           Route::get('/category-fetch',[QuestionController::class,'category_fetch']); 
+           Route::get('/subcategory-fetch',[QuestionController::class,'subcategory_fetch']);
+           Route::get('/subsubcategory-fetch',[QuestionController::class,'subsubcategory_fetch']);
+
+           Route::get('/admin/question',[QuestionController::class,'index']);
+           Route::get('/admin/question_fetch/{course_id}/{category_id}/{sub_category_id}/{sub_sub_category_id}',[QuestionController::class,'fetch']);
+           Route::get('/admin/question/fetch_data/{course_id}/{category_id}/{sub_category_id}/{sub_sub_category_id}',[QuestionController::class,'fetch_data']);
+           Route::post('admin/question_insert',[QuestionController::class,'store']);
+           Route::get('/admin/question_edit/{id}',[QuestionController::class,'edit']);
+           Route::post('/admin/question_update/{id}',[QuestionController::class,'update']);
+           Route::delete('/admin/question_delete/{id}',[QuestionController::class,'destroy']);
 
 
          //Member 
