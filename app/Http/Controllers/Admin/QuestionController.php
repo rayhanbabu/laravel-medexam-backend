@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\validator;
 use Illuminate\Support\Facades\Exception;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\QuestionImport;
 
 
 class QuestionController extends Controller
@@ -249,6 +251,25 @@ class QuestionController extends Controller
                     return view('admin.question_data', compact('data'))->render();                 
            }
       }
+
+
+
+
+      public function question_import(Request $request){
+
+
+      
+        $user=user_info();
+        $course_id=$request->input('course_id');
+        $category_id=$request->input('category_id');
+        $sub_category_id=$request->input('sub_category_id');
+        $sub_sub_category_id=$request->input('sub_sub_category_id');
+      
+         Excel::Import(new QuestionImport($course_id,$category_id,$sub_category_id,$sub_sub_category_id,$user->id),request()->file('file'));
+          return back()->with('success','Data Imported Successfully');
+    
+      
+    }
 
 
 

@@ -136,6 +136,8 @@ use App\Http\Controllers\Admin\QuestionController;
            Route::post('/admin/question_update/{id}',[QuestionController::class,'update']);
            Route::delete('/admin/question_delete/{id}',[QuestionController::class,'destroy']);
 
+           Route::post('/admin/question_import',[QuestionController::class,'question_import']);
+
 
          //Member 
          Route::get('/admin/member',[MemberController::class,'member']);
@@ -169,18 +171,11 @@ use App\Http\Controllers\Admin\QuestionController;
 
 
           
-      Route::get('/member/login',[MemberAuthController::class,'login'])->middleware('MemberTokenExist');
-      Route::post('/member/login-insert',[MemberAuthController::class,'login_insert']);
+    
+
 
       
 
-      Route::middleware('MemberToken')->group(function(){ 
-            Route::get('/member/logout',[MemberAuthController::class,'logout']);
-            Route::get('/member/dashboard',[MemberAuthController::class,'dashboard']);
-            Route::get('/member/credit',[MemberAuthController::class,'credit']);
-            Route::get('/member/debit',[MemberAuthController::class,'debit']);
-
-       });
         
 
 

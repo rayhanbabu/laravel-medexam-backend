@@ -43,12 +43,15 @@ class CourseController extends Controller
                $result['id']=$arr['0']->id;
                $result['course_name']=$arr['0']->course_name;
                $result['serial']=$arr['0']->serial;
+               $result['amount']=$arr['0']->amount;
                $result['course_status']=$arr['0']->course_status;
+
           } else {
               $result['id']='';
               $result['course_name']='';
               $result['course_status']='';
               $result['serial']='';
+              $result['amount']='';
           }
 
             return view('admin.course_manage',$result);  
@@ -78,6 +81,7 @@ class CourseController extends Controller
        }
          $model->serial=$request->input('serial');
          $model->course_name=$request->input('course_name');
+         $model->amount=$request->input('amount');
          $model->course_status=$request->input('course_status');
          $model->save();
 

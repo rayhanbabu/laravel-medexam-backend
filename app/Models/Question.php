@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     use HasFactory;
+
+    protected $table = 'questions';
     protected $fillable = [
-        'question',
+        'title',
         'course_id',
         'category_id',
         'sub_category_id',
@@ -18,6 +20,8 @@ class Question extends Model
         'updated_by',
         'status',
         'description'
+
+
     ];
     protected $casts = [
         'created_at' => 'datetime',

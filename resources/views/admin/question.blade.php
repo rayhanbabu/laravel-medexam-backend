@@ -3,11 +3,10 @@
 @section('sub_sub_category','active')
 @section('content')
 
-<div class="row mt-2 mb-0 mx-1 shadow p-1">
-       <div class="col-sm-3 my-2">
-           <form  method="get" enctype="multipart/form-data">   
-       
-              <select name="course_id" id="course_id" class="js-example-disabled-results" style="width:300px;" aria-label="Default select example" required>
+    <div class="row mt-2 mb-0 mx-1 shadow p-1">
+         <div class="col-sm-3 my-2">
+             <form  method="get" enctype="multipart/form-data">   
+                 <select name="course_id" id="course_id" class="js-example-disabled-results" style="width:300px;" aria-label="Default select example" required>
                      <option value=""> Select Course </option>
                       @foreach($course as $row)  
                           @if($row->id==($course_id?$course_id->id:0))
@@ -17,8 +16,8 @@
                              <option value="{{$row->id}}">{{$row->course_name}}</option>
                            @endif
                       @endforeach
-              </select>
-      </div>
+                </select>
+       </div>
 
 
       <div class="col-sm-3 my-2">
@@ -46,24 +45,57 @@
     </div>
 
 
-    @if($course_id!="" && $category_id!="" && $sub_category_id!="")    
+  @if($course_id!="" && $category_id!="" && $sub_category_id!="")    
   <div class="card">
   <div class="card-header">
 
   <div class="row">
-          <div class="col-11"> <h6 class="mt-0"> <b> Course  </b> : {{$course_id?$course_id->course_name:"" }} 
+          <div class="col-sm-11"> <h6 class="mt-0"> <b> Course  </b> : {{$course_id?$course_id->course_name:"" }} 
                   <b>   Category </b> : {{$category_id?$category_id->category_name:"" }} 
                   <b> Sub Category </b> : {{$sub_category_id?$sub_category_id->sub_category_name:"" }}
                   <b> Sub Sub Category </b> : {{$sub_sub_category_id?$sub_sub_category_id->sub_sub_category_name:"" }}
           </h6></div>
                    
-                      <div class="col-1">
-                         <div class="d-grid gap-2 d-md-flex ">
+                  <div class="col-sm-1">
+                      <div class="d-grid gap-2 d-md-flex ">
                           <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#AddModal">
                            Add
                          </button>         
-                </div>
-          </div> 
+                     </div>
+                  </div> 
+
+     
+       <div class="col-sm-4">
+           <form method="post" action="{{url('admin/question_import')}}"  class="myform"  enctype="multipart/form-data" >
+               {!! csrf_field() !!}
+
+                        <div class="d-grid gap-2 d-md-flex"> 
+                             <input type="file" name="file" class="form-control" required>
+                        </div>
+                  </div> 
+
+
+                     <input type="hidden" name="course_id" id="course_id" value="{{$course_id->id}}" >
+                     <input type="hidden" name="category_id" id="category_id" value="{{$category_id->id}}" >
+                     <input type="hidden" name="sub_category_id" id="sub_category_id" value="{{$sub_category_id->id}}" >
+                      <input type="hidden" name="sub_sub_category_id" id="sub_sub_category_id" value="{{$sub_sub_category_id->id}}" >
+
+                  <div class="col-sm-1">
+                        <div class="d-grid gap-2 d-md-flex">
+                              <button type="submit" name="import" class="btn btn-primary btn-sm">Import</button>
+                     </div>
+                  </div> 
+
+                  <div class="col-sm-7">
+                        <div class="d-grid gap-2 d-md-flex">
+                           Sheet=title, option1, is_correct1, option2, is_correct2, option3, is_correct3, option4, is_correct4
+                     </div>
+                  </div> 
+          
+            </div>
+
+            </form>
+
     </div> 
 
     </div>

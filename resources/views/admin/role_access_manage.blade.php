@@ -41,15 +41,15 @@
                    <div  class="alert alert-success"> {{Session::get('success')}}</div>
              @endif
 
-  </div>
+     </div>
 
   <div class="card-body">    
-  <form method="post" action="{{url('admin/role_access/insert')}}"  class="myform"  enctype="multipart/form-data" >
-  {!! csrf_field() !!}
+    <form method="post" action="{{url('admin/role_access/insert')}}"  class="myform"  enctype="multipart/form-data" >
+         {!! csrf_field() !!}
 
-     <input type="hidden" name="id"  value="{{$id}}" class="form-control" >
+       <input type="hidden" name="id"  value="{{$id}}" class="form-control" >
 
-     <div class="row px-2">
+        <div class="row px-2">
 
           @if(Auth::user()->userType=="SupperAdmin")
 

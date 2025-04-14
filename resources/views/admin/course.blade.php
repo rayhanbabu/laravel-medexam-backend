@@ -43,6 +43,7 @@
                          <td> ID </td>
                          <td> Serial </td>
                          <td> Course </td>
+                         <td> Amount </td>
                          <td> Status</td>
                          <td> Edit </td>
                          <td> Delete </td>
@@ -79,6 +80,7 @@
             {data: 'id', name: 'id'},
             {data: 'serial', name: 'serial'},
             {data: 'course_name', name: 'course_name'},
+            {data: 'amount', name: 'amount'},
             {data: 'status', name: 'status'},
             {data: 'edit', name: 'edit', orderable: false, searchable: false},
             {data: 'delete', name: 'delete', orderable: false, searchable: false},

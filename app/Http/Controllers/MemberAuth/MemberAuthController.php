@@ -15,79 +15,72 @@ use Illuminate\Support\Facades\DB;
 use App\Helpers\MemberJWTToken;
 use App\Models\Member;
 use App\Models\Service;
-use App\Models\Balance;
-use App\Models\Debit;
-use App\Models\Credit;
 use Exception;
 
 class MemberAuthController extends Controller
 {
-
-    public function login(Request $request)
-    {
-        try {
-              return view('member.login');
-         } catch (Exception $e) {
-              return  view('errors.error', ['error' => $e]);
-         }
-    }
 
 
    
     public function login_insert(Request $request)
     {
         // Validate the input
-        $request->validate([
-            'phone' => ['required','string','max:255'],
+        $validator = Validator::make($request->all(), [
+            'phone' => ['required', 'string', 'max:255'],
             'password' => ['required'],
         ]);
     
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
+        }
     
         // Rate-limiting (Throttle)
         $throttleKey = Str::lower($request->input('phone')) . '|' . $request->ip();
     
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-            throw ValidationException::withMessages([
-                'email' => ['Too many login attempts. Please try again in ' . RateLimiter::availableIn($throttleKey) . ' seconds.'],
-            ]);
+            return response()->json([
+                'message' => 'Too many login attempts',
+                'retry_after' => RateLimiter::availableIn($throttleKey)
+            ], 400);
         }
     
-        // Retrieve member by email
-        $member = Member::where('phone',$request->phone)->first();
-
-        if ($member && $member->member_status == 0) {
-            // If the user exists and their status is inactive, throw an exception
-            throw ValidationException::withMessages([
-                'email' => ['Your account is inactive.'],
-            ]);
-        }
-
-        if($request->password==$member->password) {
-              // Increment the throttle attempts if login fails
-              // Reset the rate limiter on successful login
-             RateLimiter::clear($throttleKey);
+        // Retrieve member by phone
+        $member = Member::where('phone', $request->phone)->first();
     
-             $token_member = MemberJWTToken::CreateToken($member->member_name, $member->email, $member->id);
-             Cookie::queue('token_member',$token_member, 60*24*30); //96 hour
-
-             $member_info = [
-                 "member_name" => $member->member_name, "email" => $member->email ,"bangla_name" => $member->bangla_name
-              ];
-             $member_info_array = serialize($member_info);
-              Cookie::queue('member_info', $member_info_array, 60 * 24*30);
-
-             // You can also update any status or redirect here
-              return redirect("/member/dashboard")->with('success', 'Logged in successfully!');
-
-        }else{
+        if (!$member) {
             RateLimiter::hit($throttleKey);
-            throw ValidationException::withMessages([
-                'email' => ['These credentials do not match our records.'],
-            ]);
+            return response()->json([
+                'message' => 'These credentials do not match our records.'
+            ], 400);
         }
-
-        // return $member->password.'-'.$request->password;
- 
+    
+        if ($member->member_status == 0) {
+            return response()->json([
+                'message' => 'Your account is inactive.'
+            ], 400);
+        }
+    
+        // Check plain-text password (not secure — see note below!)
+        if ($request->password === $member->password) {
+            RateLimiter::clear($throttleKey);
+    
+            $token_member = MemberJWTToken::CreateToken($member->member_name, $member->email, $member->id);
+    
+            return response()->json([
+                'message' => 'Login successful',
+                'TOKEN_MEMBER' => $token_member,
+                'member_info' => $member->select('member_name', 'email', 'bangla_name','phone')->first()
+            ], 200);
+        } else {
+            RateLimiter::hit($throttleKey);
+    
+            return response()->json([
+                'message' => 'These credentials do not match our records.'
+            ], 400);
+        }
     }
 
 
@@ -100,14 +93,16 @@ class MemberAuthController extends Controller
        }
 
 
-    public function dashboard(Request $request)
+    public function profile(Request $request)
      {
           try {
                    $member_id = $request->header('member_id');
-                   $member = Member::leftjoin('plots','plots.id','=','members.plot_id')
-                   ->where('members.id',$member_id)->select('plots.plot_no','members.*')->first();
-                   $balance=Balance::where('member_id',$member_id)->latest()->first();
-                   return view('member.dashboard',['balance'=>$balance,'member'=>$member]);
+                   $member = Member::where('members.id',$member_id)->first();
+                   return response()->json([
+                       'member_info' => $member,
+                ], 200);
+
+                  
            } catch (Exception $e) {
                   return  view('errors.error', ['error' => $e]);
            }

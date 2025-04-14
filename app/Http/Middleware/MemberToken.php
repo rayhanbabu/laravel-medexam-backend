@@ -17,13 +17,14 @@ class MemberToken
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token_member=Cookie::get('token_member');
-        $result=MemberJWTToken::ReadToken($token_member);
+        
+        $TOKEN_MEMBER=$request->header('TOKEN_MEMBER');
+        $result=MemberJWTToken::ReadToken($TOKEN_MEMBER);
           if($result=="unauthorized"){
                return response([
                     "status"=>"unauthorized",
                     "message"=>"Please login"
-                ]);
+                ],401);
            }else { 
                $request->headers->set('member_name',$result->name);
                $request->headers->set('email',$result->email);

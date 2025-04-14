@@ -62,6 +62,11 @@
                <input type="text" name="course_name" class="form-control" value="{{$course_name}}" required>
           </div> 
 
+          <div class="form-group col-sm-4 my-2">
+               <label class=""><b> Amount (Taka)<span style="color:red;"> * </span></b></label>
+               <input type="number" name="amount" class="form-control" value="{{$amount}}" required>
+          </div> 
+
 
             
             <div class="form-group col-sm-4  my-2">

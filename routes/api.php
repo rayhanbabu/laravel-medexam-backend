@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MemberAuth\MemberAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+
+  Route::post('/member/login',[MemberAuthController::class,'login_insert']);
+
+  
+  Route::middleware('MemberToken')->group(function(){ 
+    Route::get('/member/logout',[MemberAuthController::class,'logout']);
+    Route::get('/member/profile',[MemberAuthController::class,'profile']);
+ 
 });
