@@ -9,86 +9,129 @@ use Illuminate\Validation\ValidationException;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Exception;
 use App\Models\Member;
-use Exception;
+use App\Models\Course;
+use App\Models\CourseUser;
+use App\Models\Subscription;
+use App\Models\Invoice;
+
+
+
 
 class CourseUserController extends Controller
 {
 
   
 
-   
-    public function login_insert(Request $request)
-    {
-        // Validate the input
-        $request->validate([
-            'phone' => ['required','string','max:255'],
-            'password' => ['required'],
-        ]);
-    
-    
-        // Rate-limiting (Throttle)
-        $throttleKey = Str::lower($request->input('phone')) . '|' . $request->ip();
-    
-        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-            throw ValidationException::withMessages([
-                'email' => ['Too many login attempts. Please try again in ' . RateLimiter::availableIn($throttleKey) . ' seconds.'],
-            ]);
+      public function course_list(Request $request){
+             $data = Course::where('course_status',1)->orderBy('serial','asc')->get();        
+                return response()->json([
+                  'data' => $data,
+                ],200);
+         }
+
+         public function subscription_list(Request $request){
+               $data = Subscription::where('subscription_status',1)->orderBy('serial','asc')->get();          
+                return response()->json([
+                  'data' => $data,
+                ],200);
+           }
+
+        public function course_enrollment_list(Request $request){
+            $member_id = $request->header('member_id');
+            $data = CourseUser::with('course')->where('user_id',$member_id)->orderBy('id','desc')->get();
+           
+               return response()->json([
+                 'data' => $data,
+               ],200);
+         }
+
+
+     public function course_enrollment(Request $request){   
+         DB::beginTransaction();
+          try {
+
+             $member_id = $request->header('member_id');  
+             $validator=\Validator::make($request->all(),[  
+                'course_id' => 'required|integer|exists:courses,id',
+                'subscription_id' => 'required|integer|exists:subscriptions,id',
+              ],
+            );
+
+             if($validator->fails()){
+                     return response()->json([
+                        'validate_err'=>$validator->messages(),
+                    ],400);
+              }
+
+             $course_id = $request->input('course_id');
+             $subscription_id = $request->input('subscription_id');
+             $subscription = Subscription::where('id',$subscription_id)->first();
+
+             $course = CourseUser::where('course_id',$course_id)->where('user_id',$member_id)->first();
+
+             $start = now();
+             $end = now()->addMonths($subscription->subscription_month);
+
+             if($course){
+                 return response()->json([
+                     'message' => "Already Enrolled in this Course",
+                 ],400);
+              }
+            
+             $model =new CourseUser;
+             $model->course_id = $course_id;
+             $model->user_id = $member_id;
+             $model->access_expired_date = $end;
+             $model->purchase_date = $start;
+             $model->status = 0;
+             $model->created_by = $member_id;
+             $model->save();
+
+
+                $invoice=new Invoice;
+                $invoice->tran_id = Str::random(10);
+                $invoice->user_id = $member_id;
+                $invoice->courseuser_id = $model->id;
+                $invoice->subscription_id = $subscription_id;
+                $invoice->amount = $subscription->amount;
+                $invoice->discount = 0;
+                $invoice->total_amount = $subscription->amount;
+                $invoice->access_expired_date = $end;
+                $invoice->start_date = $start;
+                $invoice->invoice_date = now();
+                $invoice->billing_cycle = $subscription->subscription_month;
+                $invoice->payment_status =0;
+                $invoice->save();
+
+                DB::commit();
+           
+               return response()->json([
+                     'message' => "Course Enrolled Successfully",
+                ],200);
+
+
+            } catch (\Exception $e) {
+                DB::rollback();
+                return response()->json([
+                    'message' => 'Failed to update agent',
+                    'error' => $e->getMessage(),
+                ], 500);
+            }
         }
-    
-        // Retrieve member by email
-        $member = Member::where('phone',$request->phone)->first();
-
-        if ($member && $member->member_status == 0) {
-            // If the user exists and their status is inactive, throw an exception
-            throw ValidationException::withMessages([
-                'email' => ['Your account is inactive.'],
-            ]);
-        }
-
-        if($request->password==$member->password) {
-              // Increment the throttle attempts if login fails
-              // Reset the rate limiter on successful login
-             RateLimiter::clear($throttleKey);
-    
-             $token_member = MemberJWTToken::CreateToken($member->member_name, $member->email, $member->id);
-             Cookie::queue('token_member',$token_member, 60*24*30); //96 hour
-
-             $member_info = [
-                 "member_name" => $member->member_name, "email" => $member->email ,"bangla_name" => $member->bangla_name
-              ];
-             $member_info_array = serialize($member_info);
-              Cookie::queue('member_info', $member_info_array, 60 * 24*30);
-
-             // You can also update any status or redirect here
-              return redirect("/member/dashboard")->with('success', 'Logged in successfully!');
-
-        }else{
-            RateLimiter::hit($throttleKey);
-            throw ValidationException::withMessages([
-                'email' => ['These credentials do not match our records.'],
-            ]);
-        }
-
-        // return $member->password.'-'.$request->password;
- 
-    }
 
 
 
-      public function logout()
-       {
-          Cookie::queue('token_member', '', -1);
-          Cookie::queue('member_info', '', -1);
-          return redirect('member/login');
-       }
-
-
-
-
-
-     
-
+        public function invoice_list(Request $request){
+            $member_id = $request->header('member_id');
+            $data = Invoice::with('subscription')->with('course')->where('user_id',$member_id)->orderBy('id','desc')->get();
+           
+               return response()->json([
+                 'data' => $data,
+               ],200);
+       
+      }
      
 
 

@@ -166,6 +166,7 @@ class QuestionController extends Controller
       $user=user_info();
       $validator=\Validator::make($request->all(),[       
           'title' => 'required',
+          'image' => 'image|mimes:jpeg,png,jpg|max:500',
        ]);
 
      if($validator->fails()){
@@ -177,6 +178,17 @@ class QuestionController extends Controller
            $app=Question::find($id);
            if($app){
              $app->title=$request->input('title');
+             if ($request->hasfile('image')) {
+                       $imgfile = 'booking-';
+                       $path = public_path('uploads/admin') . '/' . $app->image;
+                       if (File::exists($path)) {
+                          File::delete($path);
+                        }
+                       $image = $request->file('image');
+                       $new_name = $imgfile . rand() . '.' . $image->getClientOriginalExtension();
+                       $image->move(public_path('uploads/admin'), $new_name);
+                       $app->image = $new_name;
+                 }
              $app->update();   
 
              $option=$request->input('option');
@@ -222,8 +234,12 @@ class QuestionController extends Controller
 
 
      public function destroy($id){
-           $post = Question::find($id);  
-           $post->delete();
+            $post = Question::find($id);  
+            $filePath = public_path('uploads/admin') . '/' . $post->image;
+              if (File::exists($filePath)) {
+                 File::delete($filePath);
+               }
+            $post->delete();
               return response()->json([
                   'status'=>200,  
                    'message'=>'Data Deleted Successfully',

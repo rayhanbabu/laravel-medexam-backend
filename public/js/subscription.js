@@ -2,13 +2,13 @@ $(document).ready(function(){
 
     $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')} });
   
-         $('.js-example-basic-multiple').select2();
+        $('.js-example-basic-multiple').select2();
          $(".js-example-disabled-results").select2();
   
-          $('#add').click(function(){  
-              $('#submit').val("Submit");  
-              $('#add_form')[0].reset();   			   
-          }); 
+       $('#add').click(function(){  
+             $('#submit').val("Submit");  
+             $('#add_form')[0].reset();   			   
+        }); 
   
   
            fetch();
@@ -17,7 +17,7 @@ $(document).ready(function(){
            function fetch(){
               $.ajax({
                type:'GET',
-               url:'/admin/question_fetch/'+course_id+'/'+category_id+'/'+sub_category_id+'/'+sub_sub_category_id,
+               url:'/admin/subscription_fetch/'+course_id,
                datType:'json',
                success:function(response){
                       $('tbody').html('');
@@ -35,7 +35,7 @@ $(document).ready(function(){
                    {
                      $.ajax({
                      type:'DELETE',
-                     url:'/admin/question_delete/'+delete_id,
+                     url:'/admin/subscription_delete/'+delete_id,
                      success:function(response){    
                          //console.log(response); 
                          $('#success_message').html("");
@@ -64,7 +64,7 @@ $(document).ready(function(){
           let editData=new FormData($('#edit_form')[0]);
           $.ajax({
                type:'POST',
-               url:'/admin/question_update/'+edit_id,
+               url:'/admin/subscription_update/'+edit_id,
                data:editData,
                contentType: false,
                processData:false,
@@ -111,35 +111,18 @@ $(document).ready(function(){
               $('#EditModal').modal('show');
               $.ajax({
                type:'GET',
-               url:'/admin/question_edit/'+edit_id,
+               url:'/admin/subscription_edit/'+edit_id,
                success:function(response){
-                 console.log(response);
+               
                   if(response.status == 404){
                     $('#success_message').html("");
                     $('#success_message').addClass('alert alert-danger');
                     $('#success_message').text(response.message);
-                  }else{         
-                    $('#edit_title').val(response.edit_value.title);
-                    $('#option_id1').val(response.edit_value.options[0].id);
-                    $('#option_id2').val(response.edit_value.options[1].id);
-                    $('#option_id3').val(response.edit_value.options[2].id);
-                    $('#option_id4').val(response.edit_value.options[3].id);
-                    $('#option_id5').val(response.edit_value.options[4].id);
-
-                    $('#option1').val(response.edit_value.options[0].option);
-                    $('#option2').val(response.edit_value.options[1].option);
-                    $('#option3').val(response.edit_value.options[2].option);
-                    $('#option4').val(response.edit_value.options[3].option);
-                    $('#option5').val(response.edit_value.options[4].option);
-
-                    $('#is_correct1').val(response.edit_value.options[0].is_correct);
-                    $('#is_correct2').val(response.edit_value.options[1].is_correct);
-                    $('#is_correct3').val(response.edit_value.options[2].is_correct);
-                    $('#is_correct4').val(response.edit_value.options[3].is_correct);
-
-                    $("#avatar_image").html(
-                      `<img src="/uploads/admin/${response.edit_value.image}" width="200" class="img-fluid img-thumbnail">`);
-
+                  }else{
+                    $('#edit_subscription_status').val(response.edit_value.subscription_status);
+                    $('#edit_subscription_name').val(response.edit_value.subscription_name);
+                    $('#edit_subscription_month').val(response.edit_value.subscription_month);
+                    $('#edit_amount').val(response.edit_value.amount);
                     $('#edit_id').val(edit_id);
                   }
                }
@@ -156,7 +139,7 @@ $(document).ready(function(){
          
             $.ajax({
                type:'POST',
-               url:'/admin/question_insert',
+               url:'/admin/subscription_insert',
                data:formData,
                contentType: false,
                processData:false,
@@ -196,7 +179,7 @@ $(document).ready(function(){
   
           function fetch_data(page, sort_type = "", sort_by = "", search = "") {
             $.ajax({
-                url: "/admin/question/fetch_data/" + course_id + "/"+category_id+"/"+sub_category_id+"/"+sub_sub_category_id+"?page=" + page + "&sortby=" + sort_by + "&sorttype=" + sort_type + "&search=" + search,
+                url: "/admin/subscription/fetch_data/" + course_id + "?page=" + page + "&sortby=" + sort_by + "&sorttype=" + sort_type + "&search=" + search,
                 success: function(data) {
                     $('tbody').html('');
                     $('.x_content tbody').html(data);

@@ -60,7 +60,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
     $question->save(); // Save to get the question ID
 
     // Loop through options: assumes format [1 => option1, 2 => is_correct1, 3 => option2, 4 => is_correct2, etc.]
-    for ($i = 1; $i <= 7; $i += 2) {
+    for ($i = 1; $i <= 9; $i += 2) {
         if (!empty($row[$i])) {
             $option = new Option([
                 'question_id' => $question->id,

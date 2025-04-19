@@ -52,8 +52,8 @@
   <div class="row">
           <div class="col-sm-11"> <h6 class="mt-0"> <b> Course  </b> : {{$course_id?$course_id->course_name:"" }} 
                   <b>   Category </b> : {{$category_id?$category_id->category_name:"" }} 
-                  <b> Sub Category </b> : {{$sub_category_id?$sub_category_id->sub_category_name:"" }}
-                  <b> Sub Sub Category </b> : {{$sub_sub_category_id?$sub_sub_category_id->sub_sub_category_name:"" }}
+                  <b>   Sub Category </b> : {{$sub_category_id?$sub_category_id->sub_category_name:"" }}
+                  <b>   Sub Sub Category </b> : {{$sub_sub_category_id?$sub_sub_category_id->sub_sub_category_name:"" }}
           </h6></div>
                    
                   <div class="col-sm-1">
@@ -78,7 +78,7 @@
                      <input type="hidden" name="course_id" id="course_id" value="{{$course_id->id}}" >
                      <input type="hidden" name="category_id" id="category_id" value="{{$category_id->id}}" >
                      <input type="hidden" name="sub_category_id" id="sub_category_id" value="{{$sub_category_id->id}}" >
-                      <input type="hidden" name="sub_sub_category_id" id="sub_sub_category_id" value="{{$sub_sub_category_id->id}}" >
+                     <input type="hidden" name="sub_sub_category_id" id="sub_sub_category_id" value="{{$sub_sub_category_id->id}}" >
 
                   <div class="col-sm-1">
                         <div class="d-grid gap-2 d-md-flex">
@@ -88,7 +88,7 @@
 
                   <div class="col-sm-7">
                         <div class="d-grid gap-2 d-md-flex">
-                           Sheet=title, option1, is_correct1, option2, is_correct2, option3, is_correct3, option4, is_correct4
+                           Sheet=title, option1, status1, option2, status2, option3, status3, option4, status4, option5, status5
                      </div>
                   </div> 
           
@@ -225,6 +225,23 @@
                    </select>
                </div>
 
+
+               <div class="col-sm-8 my-2">
+                 <label for=""> <b> Option 5 </b> </label>
+                  <input type="text" name="option[]"  value="" class="form-control form-control-sm" required/>
+              </div>
+
+              <div class="col-sm-4 my-2">
+                  <label for=""> <b> Status </b> </label>
+                   <select class="form-select form-select-sm" name="is_correct[]"  aria-label="Default select example">
+                         <option value="0"> Incorrect  </option>
+                         <option value="1"> Correct</option>
+                     
+                   </select>
+               </div>
+
+
+
        </div>
 
           
@@ -276,6 +293,12 @@
 	          	<label> <b> Question Title </b> </label>
 	           <input name="title" id="edit_title" type="text"   class="form-control"  required/>
              <p class="text-danger err_question"></p>
+        </div>
+
+
+        <div class="form-group  my-2">     
+                <label for="roll"> Image (Max:500KB)</label>
+                <input type="file" name="image" id="image" class="form-control" placeholder="" >
         </div>
 
         <div class="row mb-2">
@@ -342,10 +365,26 @@
                    </select>
                </div>
 
+
+               <div class="col-sm-8 my-2">
+                  <input type="hidden" name="option_id[]"  id="option_id5" >
+                 <label for=""> <b> Option 5 </b> </label>
+                  <input type="text" name="option[]" id="option5" value="" class="form-control form-control-sm" required/>
+              </div>
+
+              <div class="col-sm-4 my-2">
+                  <label for=""> <b> Status </b> </label>
+                   <select class="form-select form-select-sm" name="is_correct[]" id="is_correct5" aria-label="Default select example">
+                         <option value="0"> Incorrect  </option>
+                         <option value="1"> Correct</option>
+                     
+                   </select>
+               </div>
+
        </div>
    
 	  
-
+       <div class="mt-2" id="avatar_image"> </div>
 
     <div class="loader">
             <img src="{{ asset('images/abc.gif') }}" alt="" style="width: 50px;height:50px;">

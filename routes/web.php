@@ -15,8 +15,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use App\Http\Controllers\Admin\SubsubcategoryController;
 use App\Http\Controllers\Admin\QuestionController;
-
-
+use App\Http\Controllers\Admin\SubscriptionController;
 
 
 /*
@@ -30,9 +29,9 @@ use App\Http\Controllers\Admin\QuestionController;
 |
 */
 
-       Route::get('/', function () {
-            return view('welcome');
-       });
+           Route::get('/', function () {
+                  return view('welcome');
+           });
 
 
        Route::get('/forget_password', [ProfileController::class,'forget_password']);
@@ -42,11 +41,11 @@ use App\Http\Controllers\Admin\QuestionController;
      
 
          Route::middleware('auth')->group(function () {
-               Route::get('/admin/dashboard', [AdminController::class,'index']);
-               Route::get('admin/logout', [AuthenticatedSessionController::class, 'destroy']);
+              Route::get('/admin/dashboard', [AdminController::class,'index']);
+              Route::get('admin/logout', [AuthenticatedSessionController::class, 'destroy']);
 
-               Route::get('/password_change', [ProfileController::class,'password_change']);
-               Route::post('/password_update', [ProfileController::class,'password_update']); 
+              Route::get('/password_change', [ProfileController::class,'password_change']);
+              Route::post('/password_update', [ProfileController::class,'password_update']); 
          });
 
 
@@ -98,6 +97,16 @@ use App\Http\Controllers\Admin\QuestionController;
            Route::delete('/admin/category_delete/{id}',[CategoryController::class,'destroy']);
 
 
+             //admin subscription
+             Route::get('/admin/subscription',[SubscriptionController::class,'index']);
+             Route::get('/admin/subscription_fetch/{course_id}',[SubscriptionController::class,'fetch']);
+             Route::get('/admin/subscription/fetch_data/{course_id}',[SubscriptionController::class,'fetch_data']);
+             Route::post('admin/subscription_insert',[SubscriptionController::class,'store']);
+             Route::get('/admin/subscription_edit/{id}',[SubscriptionController::class,'edit']);
+             Route::post('/admin/subscription_update/{id}',[SubscriptionController::class,'update']);
+             Route::delete('/admin/subscription_delete/{id}',[SubscriptionController::class,'destroy']);
+
+
              //admin sub_category
              Route::get('/category-fetch',[SubcategoryController::class,'category_fetch']); 
 
@@ -123,28 +132,28 @@ use App\Http\Controllers\Admin\QuestionController;
              Route::delete('/admin/sub_sub_category_delete/{id}',[SubsubcategoryController::class,'destroy']);
 
 
-           //admin question
-           Route::get('/category-fetch',[QuestionController::class,'category_fetch']); 
-           Route::get('/subcategory-fetch',[QuestionController::class,'subcategory_fetch']);
-           Route::get('/subsubcategory-fetch',[QuestionController::class,'subsubcategory_fetch']);
+            //admin question
+            Route::get('/category-fetch',[QuestionController::class,'category_fetch']); 
+            Route::get('/subcategory-fetch',[QuestionController::class,'subcategory_fetch']);
+            Route::get('/subsubcategory-fetch',[QuestionController::class,'subsubcategory_fetch']);
 
-           Route::get('/admin/question',[QuestionController::class,'index']);
-           Route::get('/admin/question_fetch/{course_id}/{category_id}/{sub_category_id}/{sub_sub_category_id}',[QuestionController::class,'fetch']);
-           Route::get('/admin/question/fetch_data/{course_id}/{category_id}/{sub_category_id}/{sub_sub_category_id}',[QuestionController::class,'fetch_data']);
-           Route::post('admin/question_insert',[QuestionController::class,'store']);
-           Route::get('/admin/question_edit/{id}',[QuestionController::class,'edit']);
-           Route::post('/admin/question_update/{id}',[QuestionController::class,'update']);
-           Route::delete('/admin/question_delete/{id}',[QuestionController::class,'destroy']);
+            Route::get('/admin/question',[QuestionController::class,'index']);
+            Route::get('/admin/question_fetch/{course_id}/{category_id}/{sub_category_id}/{sub_sub_category_id}',[QuestionController::class,'fetch']);
+            Route::get('/admin/question/fetch_data/{course_id}/{category_id}/{sub_category_id}/{sub_sub_category_id}',[QuestionController::class,'fetch_data']);
+            Route::post('admin/question_insert',[QuestionController::class,'store']);
+            Route::get('/admin/question_edit/{id}',[QuestionController::class,'edit']);
+            Route::post('/admin/question_update/{id}',[QuestionController::class,'update']);
+            Route::delete('/admin/question_delete/{id}',[QuestionController::class,'destroy']);
 
-           Route::post('/admin/question_import',[QuestionController::class,'question_import']);
+            Route::post('/admin/question_import',[QuestionController::class,'question_import']);
 
 
-         //Member 
-         Route::get('/admin/member',[MemberController::class,'member']);
-         Route::post('/admin/member/insert',[MemberController::class,'store']);
-         Route::get('/admin/member_view/{id}',[MemberController::class,'edit']);
-         Route::post('/admin/member/update',[MemberController::class,'update']);
-         Route::delete('/admin/member/delete',[MemberController::class,'delete']);
+          //Member 
+          Route::get('/admin/member',[MemberController::class,'member']);
+          Route::post('/admin/member/insert',[MemberController::class,'store']);
+          Route::get('/admin/member_view/{id}',[MemberController::class,'edit']);
+          Route::post('/admin/member/update',[MemberController::class,'update']);
+          Route::delete('/admin/member/delete',[MemberController::class,'delete']);
 
       
             //website customize 

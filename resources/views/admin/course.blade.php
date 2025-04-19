@@ -41,9 +41,9 @@
                    <thead>
                      <tr>
                          <td> ID </td>
+                         <td> Image </td>
                          <td> Serial </td>
                          <td> Course </td>
-                         <td> Amount </td>
                          <td> Status</td>
                          <td> Edit </td>
                          <td> Delete </td>
@@ -78,9 +78,9 @@
        },
        columns: [
             {data: 'id', name: 'id'},
+            {data: 'image', name: 'image'},
             {data: 'serial', name: 'serial'},
             {data: 'course_name', name: 'course_name'},
-            {data: 'amount', name: 'amount'},
             {data: 'status', name: 'status'},
             {data: 'edit', name: 'edit', orderable: false, searchable: false},
             {data: 'delete', name: 'delete', orderable: false, searchable: false},

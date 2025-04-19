@@ -102,11 +102,11 @@ class NoticeController extends Controller
                   File::delete($path);
                }
 
-           $image= $request->file('image');
-           $file_name = 'image'.rand() . '.' . $image->getClientOriginalExtension();
-           $image->move(public_path('uploads/admin'), $file_name);
-           $model->image=$file_name;
-          }
+             $image= $request->file('image');
+             $file_name = 'image'.rand() . '.' . $image->getClientOriginalExtension();
+             $image->move(public_path('uploads/admin'), $file_name);
+             $model->image=$file_name;
+            }
           $model->updated_by=$user->id;
       }else{
            $model= new Notice; 

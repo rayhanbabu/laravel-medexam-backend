@@ -101,16 +101,8 @@ $(document).ready(function(){
                   $('#edit_permanet_address').val(response.value.permanet_address);
                   $('#edit_dept').val(response.value.dept);
 
-                
-                  $('#edit_plot_id').val(response.value.plot_id);
-                  $('#edit_land_price').val(response.value.land_price);
-                  $('#edit_deed_no').val(response.value.deed_no);
-                  $('#edit_date_of_deed').val(response.value.date_of_deed);
-                  $('#edit_farm_no').val(response.value.farm_no);
-                  $('#edit_plot_sell').val(response.value.plot_sell);
-                  $('#edit_plot_buy').val(response.value.plot_buy);
-
-                
+                  $("#avatar_image").html(
+                    `<img src="/uploads/admin/${response.value.image}" width="200" class="img-fluid img-thumbnail">`);
 
                 }
               }
