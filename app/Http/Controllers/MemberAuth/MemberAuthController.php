@@ -59,7 +59,7 @@ class MemberAuthController extends Controller
     public function login_insert(Request $request)
     {
         // Validate the input
-        $validator = Validator::make($request->all(), [
+        $validator = \Validator::make($request->all(), [
             'phone' => ['required', 'string', 'max:255'],
             'password' => ['required'],
         ]);
