@@ -21,6 +21,39 @@ class MemberAuthController extends Controller
 {
 
 
+
+   public function registration(Request $request)
+     {
+        // Validate the input
+        $validator = Validator::make($request->all(), [
+            'member_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:members'],
+            'phone' => ['required', 'string', 'max:15', 'unique:members'],
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+    
+        // Create the member
+        $member = Member::create([
+            'member_name' => $request->member_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => $request->password, // Note: This should be hashed in a real application
+            'member_status' => 1, // Assuming 1 means active
+        ]);
+    
+        return response()->json([
+            'message' => 'Registration successful',
+        ], 201);
+    }
+   
+
    
     public function login_insert(Request $request)
     {
@@ -139,22 +172,7 @@ class MemberAuthController extends Controller
 
 
 
-       public function debit(Request $request)
-         {
-             try {
-                 $member_id = $request->header('member_id');
-             if ($request->ajax()) {
-              $data = Debit::where('member_id',$member_id)->where('debit_status',1)->latest()->get();
-                return Datatables::of($data)
-                  ->addIndexColumn()
-                  ->make(true);
-              }
-          return view('member.debit');  
-               } catch (Exception $e) {
-                     return  view('errors.error', ['error' => $e]);
-               }
-          } 
-
+     
 
 
 

@@ -30,7 +30,7 @@ use App\Http\Controllers\Admin\SubscriptionController;
 */
 
            Route::get('/', function () {
-                  return view('welcome');
+                  return 'API Connected';
            });
 
 

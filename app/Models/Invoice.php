@@ -23,7 +23,7 @@ class Invoice extends Model
 
     public function course()
     {
-        return $this->hasOneThrough(Course::class, CourseUser::class, 'id', 'id', 'courseuser_id', 'course_id');
+        return $this->hasOneThrough(Course::class, CourseUser::class, 'id', 'id' ,'courseuser_id','course_id');
     }
     
 

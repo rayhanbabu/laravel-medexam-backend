@@ -16,6 +16,7 @@ class Member extends Model
     protected $fillable = [
         'plot_id',
         'phone',
+        'password',
         'email',
         'member_no',
         'bangla_name',
@@ -23,6 +24,7 @@ class Member extends Model
         'dept',
         'member_category',
         'member_type',
+        'member_status',
         'deed_no',
         'date_of_deed',
         'farm_no',
