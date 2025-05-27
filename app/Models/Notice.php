@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Notice extends Model
 {
     use HasFactory;
-    use LogsActivity;
+    // use LogsActivity;
 
     protected $fillable = [
         'title',
