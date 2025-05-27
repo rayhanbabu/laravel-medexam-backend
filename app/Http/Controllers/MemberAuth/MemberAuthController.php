@@ -13,6 +13,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\MemberJWTToken;
+
 use App\Models\Member;
 use App\Models\Service;
 use Exception;
@@ -25,7 +26,7 @@ class MemberAuthController extends Controller
    public function registration(Request $request)
      {
         // Validate the input
-        $validator = Validator::make($request->all(), [
+        $validator = /Validator::make($request->all(), [
             'member_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:members'],
             'phone' => ['required', 'string', 'max:15', 'unique:members'],
