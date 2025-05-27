@@ -41,14 +41,14 @@ class MemberAuthController extends Controller
         }
     
         // Create the member
-        $member = Member::create([
-            'member_name' => $request->member_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => $request->password, // Note: This should be hashed in a real application
-            'member_status' => 1, // Assuming 1 means active
-        ]);
-    
+        $member = new Member();
+        $member->member_name = $request->member_name;
+        $member->email = $request->email;
+        $member->phone = $request->phone;
+        $member->password = $request->password; // Note: This should be hashed in a real application
+        $member->member_status = 1; // Assuming 1 means active
+        $member->save();
+
         return response()->json([
             'message' => 'Registration successful',
         ], 201);
