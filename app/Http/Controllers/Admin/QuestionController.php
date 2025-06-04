@@ -41,7 +41,7 @@ class QuestionController extends Controller
               $sub_category_id='';
               $sub_sub_category_id='';
           }
-          return view('admin.Question',['course'=>$course,'course_id'=>$course_id,'category_id'=>$category_id,
+          return view('admin.question',['course'=>$course,'course_id'=>$course_id,'category_id'=>$category_id,
           'category'=>$category,'subcategory'=>$subcategory,'sub_category_id'=>$sub_category_id
           ,'subsubcategory'=>$subsubcategory,'sub_sub_category_id'=>$sub_sub_category_id]); 
       }
